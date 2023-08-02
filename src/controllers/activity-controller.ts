@@ -10,7 +10,13 @@ export async function getDays(req: AuthenticatedRequest, res: Response) {
     const days = await activityService.getDays(userId);
     return res.status(httpStatus.OK).send(days);
   } catch (error) {
-    return res.sendStatus(httpStatus.NOT_FOUND);
+    if (error.name === 'NotFoundError') {
+      return res.sendStatus(httpStatus.NOT_FOUND);
+    }
+    if (error.name === 'cannotListActivitiesError') {
+      return res.status(httpStatus.PAYMENT_REQUIRED).send(error.message);
+    }
+    return res.sendStatus(httpStatus.BAD_REQUEST);
   }
 }
 
