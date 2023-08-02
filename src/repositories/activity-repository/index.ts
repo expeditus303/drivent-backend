@@ -1,5 +1,5 @@
 import { prisma } from '@/config';
-import { Activity, DateActivity } from '@prisma/client';
+import { Activity, DateActivity, Location } from '@prisma/client';
 
 async function getActivities(): Promise<Activity[]> {
   return prisma.activity.findMany({
@@ -18,9 +18,14 @@ async function getDays(): Promise<DateActivity[]> {
   return prisma.dateActivity.findMany();
 }
 
+async function getLocations(): Promise<Location[]> {
+  return prisma.location.findMany();
+}
+
 const activityRepository = {
   getActivities,
   getDays,
+  getLocations,
 };
 
 export default activityRepository;

@@ -9,8 +9,17 @@ async function getDays() {
   return days;
 }
 
+async function getLocations() {
+  const locations = await activityRepository.getLocations();
+  if (!locations) {
+    throw notFoundError();
+  }
+  return locations;
+}
+
 const activityService = {
   getDays,
+  getLocations,
 };
 
 export default activityService;

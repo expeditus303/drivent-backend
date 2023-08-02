@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { authenticateToken } from '@/middlewares';
-import { getDays } from '@/controllers/activity-controller';
+import { getDays, getLocations } from '@/controllers/activity-controller';
 
 const activityRouter = Router();
 
-activityRouter.all('/*', authenticateToken).get('/days', getDays);
+activityRouter.all('/*', authenticateToken).get('/days', getDays).get('/locations', getLocations);
 
 export { activityRouter };
