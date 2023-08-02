@@ -37,22 +37,24 @@ model Event {
   logoImageUrl       String   @db.VarChar(255)
   startsAt           DateTime
   endsAt             DateTime
+  Activity           Activity[]
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 }
 
 model Enrollment {
-  id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(255)
-  cpf       String    @db.VarChar(255)
-  birthday  DateTime
-  phone     String    @db.VarChar(255)
-  userId    Int       @unique
-  User      User      @relation(fields: [userId], references: [id])
-  Address   Address[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  Ticket    Ticket[]
+  id            Int       @id @default(autoincrement())
+  name          String    @db.VarChar(255)
+  cpf           String    @db.VarChar(255)
+  birthday      DateTime
+  phone         String    @db.VarChar(255)
+  userId        Int       @unique
+  User          User      @relation(fields: [userId], references: [id])
+  Address       Address[]
+  Subscription  Subscription[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  Ticket        Ticket[]
 }
 
 model Address {
@@ -137,4 +139,56 @@ model Booking {
   roomId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Location {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  Activity  Activity[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Activity {
+  id            Int         @id @default(autoincrement())
+  title         String
+  vacancies     Int
+  startTime     DateTime 
+  endTime       DateTime
+  eventId       Int
+  Event         Event       @relation(fields: [eventId], references: [id])
+  locationId    Int
+  Location      Location    @relation(fields: [locationId], references: [id])
+  ScheduleEvent ScheduleEvent[]
+  Subscription  Subscription[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model DateActivity {
+  id            Int      @id @default(autoincrement())
+  activityDate  DateTime
+  ScheduleEvent ScheduleEvent[] 
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model ScheduleEvent {
+  id              Int           @id @default(autoincrement())
+  activityId      Int
+  Activity        Activity      @relation(fields: [activityId], references: [id])
+  dateId          Int
+  DateActivity    DateActivity  @relation(fields: [dateId], references: [id])
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Subscription {
+  id            Int         @id @default(autoincrement())
+  activityId    Int
+  Activity      Activity    @relation(fields: [activityId], references: [id])
+  enrollmentId  Int
+  Enrollment    Enrollment  @relation(fields: [enrollmentId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
