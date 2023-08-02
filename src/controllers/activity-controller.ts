@@ -20,3 +20,12 @@ export async function getLocations(_req: AuthenticatedRequest, res: Response) {
     return res.sendStatus(httpStatus.NOT_FOUND);
   }
 }
+
+export async function getActivities(req: AuthenticatedRequest, res: Response) {
+  try {
+    const activities = await activityService.getActivities();
+    return res.send(activities);
+  } catch (error) {
+    return res.sendStatus(httpStatus.NOT_FOUND);
+  }
+}
