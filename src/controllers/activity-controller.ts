@@ -33,9 +33,10 @@ export async function getLocations(req: AuthenticatedRequest, res: Response) {
 
 export async function getActivities(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
+  const date = req.query.date as string;
 
   try {
-    const activities = await activityService.getActivities(userId);
+    const activities = await activityService.getActivities(userId, new Date(date));
     return res.send(activities);
   } catch (error) {
     return res.sendStatus(httpStatus.NOT_FOUND);
