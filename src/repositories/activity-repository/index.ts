@@ -9,13 +9,26 @@ async function getLocations(): Promise<Location[]> {
   return prisma.location.findMany();
 }
 
-async function getActivities(): Promise<Activity[]> {
+async function getActivities(date: Date): Promise<Partial<Activity>[]> {
   return prisma.activity.findMany({
-    include: {
-      Location: true,
+    where: {
       ScheduleEvent: {
-        include: {
-          DateActivity: true,
+        some: {
+          DateActivity: {
+            activityDate: date,
+          },
+        },
+      },
+    },
+    select: {
+      id: true,
+      title: true,
+      vacancies: true,
+      startTime: true,
+      endTime: true,
+      Location: {
+        select: {
+          name: true,
         },
       },
     },

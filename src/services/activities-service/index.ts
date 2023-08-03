@@ -40,10 +40,10 @@ async function getLocations(userId: number) {
   return locations;
 }
 
-async function getActivities(userId: number) {
+async function getActivities(userId: number, date: Date) {
   await listActivities(userId);
 
-  const activities = await activityRepository.getActivities();
+  const activities = await activityRepository.getActivities(date);
   if (!activities) {
     throw notFoundError();
   }
