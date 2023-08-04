@@ -64,11 +64,25 @@ async function postSubscription(userId: number, activityId: number) {
   return subscription;
 }
 
+async function deleteSubscription(userId: number, activityId: number) {
+  await listActivities(userId);
+
+  const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+  const subscriptionId = await activityRepository.findSubscription(activityId, enrollment.id);
+
+  const subscription = await activityRepository.deleteSubscription(activityId, subscriptionId[0].id);
+  if (!subscription) {
+    throw conflictError('Ocorreu um erro ao tentar excluir a inscrição na atividade!');
+  }
+  return subscription;
+}
+
 const activityService = {
   getDays,
   getLocations,
   getActivities,
   postSubscription,
+  deleteSubscription,
 };
 
 export default activityService;

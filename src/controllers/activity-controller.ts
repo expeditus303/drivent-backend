@@ -54,3 +54,15 @@ export async function postSubscription(req: AuthenticatedRequest, res: Response)
     return res.sendStatus(httpStatus.CONFLICT);
   }
 }
+
+export async function deleteSubscription(req: AuthenticatedRequest, res: Response) {
+  const { userId } = req;
+  const activityId = req.query.activityId;
+
+  try {
+    await activityService.deleteSubscription(userId, Number(activityId));
+    return res.sendStatus(httpStatus.OK);
+  } catch (error) {
+    return res.sendStatus(httpStatus.CONFLICT);
+  }
+}

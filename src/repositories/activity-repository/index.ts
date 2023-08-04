@@ -73,11 +73,41 @@ async function createSubscription(activityId: number, enrollmentId: number): Pro
   return subscription;
 }
 
+async function findSubscription(activityId: number, enrollmentId: number): Promise<Subscription[]> {
+  return prisma.subscription.findMany({
+    where: {
+      activityId,
+      enrollmentId,
+    },
+  });
+}
+
+async function deleteSubscription(activityId: number, subscriptionId: number): Promise<[Subscription, Activity]> {
+  const subscription = await prisma.$transaction([
+    prisma.subscription.delete({
+      where: {
+        id: subscriptionId,
+      },
+    }),
+    prisma.activity.update({
+      where: { id: activityId },
+      data: {
+        vacancies: {
+          increment: 1,
+        },
+      },
+    }),
+  ]);
+  return subscription;
+}
+
 const activityRepository = {
   getActivities,
   getDays,
   getLocations,
   createSubscription,
+  findSubscription,
+  deleteSubscription,
 };
 
 export default activityRepository;

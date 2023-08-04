@@ -1,6 +1,12 @@
 import { Router } from 'express';
 import { authenticateToken } from '@/middlewares';
-import { getActivities, getDays, getLocations, postSubscription } from '@/controllers/activity-controller';
+import {
+  deleteSubscription,
+  getActivities,
+  getDays,
+  getLocations,
+  postSubscription,
+} from '@/controllers/activity-controller';
 
 const activityRouter = Router();
 
@@ -9,6 +15,7 @@ activityRouter
   .get('/days', getDays)
   .get('/locations', getLocations)
   .get('/', getActivities)
-  .post('/subscriptions', postSubscription);
+  .post('/subscriptions', postSubscription)
+  .delete('/subscriptions', deleteSubscription);
 
 export { activityRouter };
