@@ -1,5 +1,5 @@
 import activityRepository from '../../repositories/activity-repository';
-import { notFoundError } from '../../errors';
+import { notFoundError, conflictError } from '../../errors';
 import enrollmentRepository from '@/repositories/enrollment-repository';
 import ticketRepository from '@/repositories/ticket-repository';
 import { cannotListActivitiesError } from '@/errors/cannot-list-activities-error';
@@ -43,17 +43,32 @@ async function getLocations(userId: number) {
 async function getActivities(userId: number, date: Date) {
   await listActivities(userId);
 
-  const activities = await activityRepository.getActivities(date);
+  const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+
+  const activities = await activityRepository.getActivities(date, enrollment.id);
   if (!activities) {
     throw notFoundError();
   }
   return activities;
 }
 
+async function postSubscription(userId: number, activityId: number) {
+  await listActivities(userId);
+
+  const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+
+  const subscription = await activityRepository.createSubscription(activityId, enrollment.id);
+  if (!subscription) {
+    throw conflictError('Ocorreu um erro ao tentar realizar a inscrição na atividade!');
+  }
+  return subscription;
+}
+
 const activityService = {
   getDays,
   getLocations,
   getActivities,
+  postSubscription,
 };
 
 export default activityService;

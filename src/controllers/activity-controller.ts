@@ -42,3 +42,15 @@ export async function getActivities(req: AuthenticatedRequest, res: Response) {
     return res.sendStatus(httpStatus.NOT_FOUND);
   }
 }
+
+export async function postSubscription(req: AuthenticatedRequest, res: Response) {
+  const { userId } = req;
+  const activityId = req.body.activityId;
+
+  try {
+    await activityService.postSubscription(userId, Number(activityId));
+    return res.sendStatus(httpStatus.OK);
+  } catch (error) {
+    return res.sendStatus(httpStatus.CONFLICT);
+  }
+}
