@@ -82,7 +82,7 @@ async function createHotelsAndRooms() {
         });
 
         const capacities = hotel.name === 'Driven World' ? [1, 2] : [1, 2, 3];
-        createRooms(capacities, createdHotel.id);
+        await createRooms(capacities, createdHotel.id);
       }),
     );
   }
@@ -207,6 +207,9 @@ async function createSchedule() {
   const schedules = await prisma.scheduleEvent.findMany();
 
   if (schedules.length === 0) {
+    await createLocationsAndDates();
+    await createActivities();
+
     const activities = await prisma.activity.findMany();
     const dates = await prisma.dateActivity.findMany();
 
@@ -250,14 +253,7 @@ async function createSchedule() {
 }
 
 async function main() {
-  await Promise.all([
-    createEvent(),
-    createTicketTypes(),
-    createHotelsAndRooms(),
-    createLocationsAndDates(),
-    createActivities(),
-    createSchedule(),
-  ]);
+  await Promise.all([createEvent(), createTicketTypes(), createHotelsAndRooms(), createSchedule()]);
 }
 
 main()
