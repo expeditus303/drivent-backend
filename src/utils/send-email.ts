@@ -32,7 +32,7 @@ export default async function sendEmail(mailInfo: MailInfo) {
 
   try {
     const info = await transporter.sendMail({
-      from: 'Turma do Didi <turma_do_didi@hotmail.com>',
+      from: `Turma do Didi <${process.env.EMAIL}>`,
       to: userEmail,
       subject: 'Pagamento efetuado com sucesso!',
       html: html,
