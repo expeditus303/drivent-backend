@@ -1,28 +1,43 @@
 import nodemailer from 'nodemailer';
 
-export default function sendEmail() {
-  // create reusable transporter object using the default SMTP transport
-  let transporter = nodemailer.createTransport({
-    service: 'tutanota', // replace with your email provider
+type MailInfo = {
+  userEmail: string;
+  userName: string;
+  ticketType: string;
+  price: number;
+};
+
+export default async function sendEmail(mailInfo: MailInfo) {
+  const { userEmail, userName, ticketType, price } = mailInfo;
+
+  const html = `
+    <h1> Pagamento confirmado! </h1>
+    <h3> Olá, ${userName}! </h3>
+    <h4> Aqui está o resumo da sua compra:</h4>
+    <h4> ${ticketType} </h4>
+    <h4> R$${price} </h4>
+    <p> Qualquer dúvida entre em contato com o nosso atendente <strong>Davi Barci</strong> que ele terá o maior prazer em lhe atender! </p>
+
+  `;
+
+  const transporter = nodemailer.createTransport({
+    service: 'hotmail',
     auth: {
-      user: 'turmadodidi@tutanota.com', // replace with your email
-      pass: 'turmadod1d1!', // replace with your email password
+      user: 'turma_do_didi@hotmail.com',
+      pass: 'Turmadodidi123',
     },
   });
 
-  // send mail with defined transport object
-  let mailOptions = {
-    from: 'turmadodidi@tutanota.com', // sender address
-    to: 'ricardotoniett@gmail.com', // list of receivers
-    subject: 'Seu pagamento foi confirmado!', // Subject line
-    text: 'ticketResume', // plaintext body
-    // html: '<b>Your payment was successful!</b>' // html body, if needed
-  };
+  try {
+    const info = await transporter.sendMail({
+      from: 'Turma do Didi <turma_do_didi@hotmail.com>',
+      to: userEmail,
+      subject: 'Pagamento efetuado com sucesso!',
+      html: html,
+    });
 
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      return console.log(error);
-    }
-    console.log('Message sent: %s', info.messageId);
-  });
+    console.log('menssage sent ' + info.messageId);
+  } catch (err) {
+    console.log(err);
+  }
 }

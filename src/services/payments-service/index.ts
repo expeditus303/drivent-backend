@@ -44,7 +44,32 @@ async function paymentProcess(ticketId: number, userId: number, cardData: CardPa
 
   await ticketRepository.ticketProcessPayment(ticketId);
 
-  sendEmail()
+  const emailData = await ticketRepository.getEmailInfo(ticketId);
+
+  let ticketType;
+
+  if (emailData) {
+    if (emailData.TicketType.isRemote === true) {
+      ticketType = 'Online';
+    } else if (emailData.TicketType.isRemote === false) {
+      ticketType = 'Presencial';
+      if (emailData.TicketType.includesHotel === false) {
+        ticketType += ' + Sem hotel';
+      } else if (emailData.TicketType.includesHotel === true) {
+        ticketType += ' + Com hotel';
+      }
+    }
+
+    const mailInfo = {
+      userEmail: emailData.Enrollment.User.email,
+      userName: emailData.Enrollment.name,
+      ticketType,
+      price: emailData.TicketType.price
+    };
+
+      sendEmail(mailInfo);
+  }
+
 
   return payment;
 }
