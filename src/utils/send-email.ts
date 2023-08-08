@@ -1,4 +1,6 @@
 import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env.development' });
 
 type MailInfo = {
   userEmail: string;
@@ -23,8 +25,8 @@ export default async function sendEmail(mailInfo: MailInfo) {
   const transporter = nodemailer.createTransport({
     service: 'hotmail',
     auth: {
-      user: 'turma_do_didi@hotmail.com',
-      pass: 'Turmadodidi123',
+      user: process.env.EMAIL,
+    pass: process.env.EMAIL_PASSWORD,
     },
   });
 
