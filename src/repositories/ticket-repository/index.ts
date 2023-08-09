@@ -56,6 +56,21 @@ async function ticketProcessPayment(ticketId: number) {
   });
 }
 
+async function getEmailInfo(ticketId: number) {
+  return await prisma.ticket.findUnique({
+    where: { id: ticketId },
+    select: {
+      TicketType: true,
+      Enrollment: {
+        select: {
+          name: true,
+          User: true
+        }
+      }
+    }
+  });
+}
+
 export type CreateTicketParams = Omit<Ticket, "id" | "createdAt" | "updatedAt">
 
 const ticketRepository = {
@@ -65,6 +80,7 @@ const ticketRepository = {
   findTickeyById,
   findTickeWithTypeById,
   ticketProcessPayment,
+  getEmailInfo
 };
 
 export default ticketRepository;
