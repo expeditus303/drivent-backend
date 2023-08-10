@@ -52,6 +52,16 @@ async function getActivities(userId: number, date: Date) {
   return activities;
 }
 
+async function getActivitiesDone(userId: number) {
+  const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+
+  const activities = await activityRepository.getActivitiesDone(enrollment.id);
+  if (!activities) {
+    throw notFoundError();
+  }
+  return activities;
+}
+
 async function postSubscription(userId: number, activityId: number) {
   await listActivities(userId);
 
@@ -81,6 +91,7 @@ const activityService = {
   getDays,
   getLocations,
   getActivities,
+  getActivitiesDone,
   postSubscription,
   deleteSubscription,
 };

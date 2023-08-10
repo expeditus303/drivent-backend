@@ -43,6 +43,17 @@ export async function getActivities(req: AuthenticatedRequest, res: Response) {
   }
 }
 
+export async function getActivitiesDone(req: AuthenticatedRequest, res: Response) {
+  const { userId } = req;
+
+  try {
+    const activities = await activityService.getActivitiesDone(userId);
+    return res.send(activities);
+  } catch (error) {
+    return res.sendStatus(httpStatus.NOT_FOUND);
+  }
+}
+
 export async function postSubscription(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
   const activityId = req.body.activityId;

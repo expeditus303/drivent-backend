@@ -3,6 +3,7 @@ import { authenticateToken } from '@/middlewares';
 import {
   deleteSubscription,
   getActivities,
+  getActivitiesDone,
   getDays,
   getLocations,
   postSubscription,
@@ -15,6 +16,7 @@ activityRouter
   .get('/days', getDays)
   .get('/locations', getLocations)
   .get('/', getActivities)
+  .get('/done', getActivitiesDone)
   .post('/subscriptions', postSubscription)
   .delete('/subscriptions', deleteSubscription);
 
