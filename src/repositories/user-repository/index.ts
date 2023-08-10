@@ -15,6 +15,23 @@ async function findByEmail(email: string, select?: Prisma.UserSelect) {
   return prisma.user.findUnique(params);
 }
 
+async function findByGithubId(githubId: string) {
+  return prisma.user.findUnique({
+    where: {
+      githubId
+    }
+  })
+}
+
+async function createGithubUser(email: string, githubId: string){
+  return prisma.user.create({
+    data: {
+      email,
+      githubId
+    }
+  })
+}
+
 async function create(data: Prisma.UserUncheckedCreateInput) {
   return prisma.user.create({
     data,
@@ -23,6 +40,8 @@ async function create(data: Prisma.UserUncheckedCreateInput) {
 
 const userRepository = {
   findByEmail,
+  findByGithubId,
+  createGithubUser,
   create,
 };
 
