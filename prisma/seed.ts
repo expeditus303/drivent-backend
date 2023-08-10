@@ -155,6 +155,14 @@ async function createActivities() {
           locationId: locations[0]?.id,
         },
         {
+          title: 'Pensando do jeito React',
+          vacancies: 15,
+          startTime: new Date('2023-08-04T11:00:00Z'),
+          endTime: new Date('2023-08-04T12:00:00Z'),
+          eventId: event?.id,
+          locationId: locations[0]?.id,
+        },
+        {
           title: 'Palestra X',
           vacancies: 30,
           startTime: new Date('2023-08-04T09:00:00Z'),
@@ -179,10 +187,26 @@ async function createActivities() {
           locationId: locations[2]?.id,
         },
         {
+          title: 'Workshop Prisma',
+          vacancies: 22,
+          startTime: new Date('2023-08-04T11:00:00Z'),
+          endTime: new Date('2023-08-04T12:00:00Z'),
+          eventId: event?.id,
+          locationId: locations[2]?.id,
+        },
+        {
           title: 'Palestra Z',
           vacancies: 3,
           startTime: new Date('2023-08-05T09:00:00Z'),
           endTime: new Date('2023-08-05T10:00:00Z'),
+          eventId: event?.id,
+          locationId: locations[0]?.id,
+        },
+        {
+          title: 'Workshop Typescript',
+          vacancies: 10,
+          startTime: new Date('2023-08-05T10:00:00Z'),
+          endTime: new Date('2023-08-05T11:00:00Z'),
           eventId: event?.id,
           locationId: locations[0]?.id,
         },
@@ -193,6 +217,14 @@ async function createActivities() {
           endTime: new Date('2023-08-05T12:00:00Z'),
           eventId: event?.id,
           locationId: locations[1]?.id,
+        },
+        {
+          title: 'Workshop Jest',
+          vacancies: 12,
+          startTime: new Date('2023-08-06T09:00:00Z'),
+          endTime: new Date('2023-08-06T10:00:00Z'),
+          eventId: event?.id,
+          locationId: locations[2]?.id,
         },
       ];
 
@@ -237,11 +269,27 @@ async function createSchedule() {
         },
         {
           activityId: activities[5]?.id,
-          dateId: dates[1]?.id,
+          dateId: dates[0]?.id,
         },
         {
           activityId: activities[6]?.id,
+          dateId: dates[0]?.id,
+        },
+        {
+          activityId: activities[7]?.id,
           dateId: dates[1]?.id,
+        },
+        {
+          activityId: activities[8]?.id,
+          dateId: dates[1]?.id,
+        },
+        {
+          activityId: activities[9]?.id,
+          dateId: dates[1]?.id,
+        },
+        {
+          activityId: activities[10]?.id,
+          dateId: dates[2]?.id,
         },
       ];
 
