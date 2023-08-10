@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import { invalidCredentialsError } from './errors';
 import axios from 'axios';
 import { stringify } from 'querystring';
+import { GITHUB_OAUTH_URL, GITHUB_USER_API_URL } from '@/utils/constants';
 
 async function signIn(params: SignInParams): Promise<SignInResult> {
   const { email, password } = params;
@@ -23,7 +24,7 @@ async function signIn(params: SignInParams): Promise<SignInResult> {
   };
 }
 
-async function signInWithGithub(code: string) {
+async function getGithubAccessToken(code: string) {
   const { CLIENT_ID, CLIENT_SECRET } = process.env;
 
   const params = {
@@ -35,52 +36,54 @@ async function signInWithGithub(code: string) {
 
   const queryString = stringify(params);
 
-  try {
-    const response = await axios.post(
-      'https://github.com/login/oauth/access_token?' + queryString,
-      {},
-      {
-        headers: {
-          Accept: 'application/json',
-        },
-      },
-    );
-
-    const { access_token } = response.data;
-
-    const userInfoResponse = await axios.get('https://api.github.com/user', {
+  const response = await axios.post(
+    GITHUB_OAUTH_URL + '?' + queryString,
+    {},
+    {
       headers: {
-        Authorization: `Bearer ${access_token}`,
         Accept: 'application/json',
       },
-    });
+    },
+  );
+
+  const { access_token } = response.data;
+
+  return access_token;
+}
+
+async function getGithubUserInfo(access_token: string) {
+  return await axios.get(GITHUB_USER_API_URL, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      Accept: 'application/json',
+    },
+  });
+}
+
+async function signInWithGithub(code: string) {
+  try {
+    const accessToken = await getGithubAccessToken(code);
+    const userInfoResponse = await getGithubUserInfo(accessToken);
 
     if (userInfoResponse.data) {
-      const { id } = userInfoResponse.data;
+      const { id, email } = userInfoResponse.data;
       const githubId = id.toString();
-      const userExists = await userRepository.findByGithubId(githubId);
+      let user = await userRepository.findByGithubId(githubId);
 
-      if (!userExists) {
-        const { email } = userInfoResponse.data;
-        const user = await userRepository.createGithubUser(email, githubId);
-
-        const token = await createSession(user.id);
-
-        return {
-          user: exclude(user, 'password', 'githubId'),
-          token,
-        };
+      if (!user) {
+        user = await userRepository.createGithubUser(email, githubId);
       }
 
-      const token = await createSession(userExists.id);
+      const token = await createSession(user.id);
 
       return {
-        user: exclude(userExists, 'password', 'githubId'),
+        user: exclude(user, 'password', 'githubId'),
         token,
       };
     }
   } catch (error) {
     console.error('Error:', error);
+    throw new Error('Failed to sign in with GitHub.');
   }
 }
 
