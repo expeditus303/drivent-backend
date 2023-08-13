@@ -1,5 +1,5 @@
-import { prisma } from '@/config';
-import { Activity, DateActivity, Location, Subscription } from '@prisma/client';
+import { prisma } from "@/database";
+import { Activity, DateActivity, Location, Subscription } from "@prisma/client";
 
 async function getDays(): Promise<DateActivity[]> {
   return prisma.dateActivity.findMany();

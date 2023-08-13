@@ -1,4 +1,4 @@
-import { prisma } from "@/config";
+import { prisma } from "@/database";
 
 async function findAllByHotelId(hotelId: number) {
   return prisma.room.findMany({

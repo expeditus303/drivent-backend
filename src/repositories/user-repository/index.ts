@@ -1,5 +1,5 @@
-import { prisma } from '@/config';
-import { Prisma } from '@prisma/client';
+import { prisma } from "@/database";
+import { Prisma } from "@prisma/client";
 
 async function findByEmail(email: string, select?: Prisma.UserSelect) {
   const params: Prisma.UserFindUniqueArgs = {
@@ -20,16 +20,16 @@ async function findByGithubId(githubId: string) {
     where: {
       githubId
     }
-  })
+  });
 }
 
-async function createGithubUser(email: string, githubId: string){
+async function createGithubUser(email: string, githubId: string) {
   return prisma.user.create({
     data: {
       email,
       githubId
     }
-  })
+  });
 }
 
 async function create(data: Prisma.UserUncheckedCreateInput) {

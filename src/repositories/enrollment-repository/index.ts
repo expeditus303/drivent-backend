@@ -1,6 +1,6 @@
-import { prisma } from "@/config";
 import { Enrollment, Prisma } from "@prisma/client";
 import { CreateAddressParams, UpdateAddressParams } from "../address-repository";
+import { prisma } from "@/database";
 
 async function findWithAddressByUserId(userId: number) {
   return prisma.enrollment.findFirst({

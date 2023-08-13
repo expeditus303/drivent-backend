@@ -1,4 +1,4 @@
-import { prisma } from "@/config";
+import { prisma } from "@/database";
 import { Prisma } from "@prisma/client";
 
 async function create(data: Prisma.SessionUncheckedCreateInput) {
