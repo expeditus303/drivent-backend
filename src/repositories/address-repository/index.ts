@@ -1,4 +1,4 @@
-import { prisma } from "@/config";
+import { prisma } from "@/database";
 import { Address } from "@prisma/client";
 
 async function upsert(enrollmentId: number, createdAddress: CreateAddressParams, updatedAddress: UpdateAddressParams) {

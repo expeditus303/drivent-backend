@@ -1,4 +1,4 @@
-import { prisma } from "@/config";
+import { prisma } from "@/database";
 
 async function findFirst() {
   return prisma.event.findFirst();
