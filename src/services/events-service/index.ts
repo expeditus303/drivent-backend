@@ -12,7 +12,7 @@ async function getFirstEvent(): Promise<GetFirstEventResult> {
   } else {
     const event = await eventRepository.findFirst();
     if (!event) throw notFoundError();
-    await redis.set(cacheKey, JSON.stringify(event));
+    await redis.setEx(cacheKey, 60, JSON.stringify(event));
     return event;
   }
 }
